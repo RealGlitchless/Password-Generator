@@ -1,94 +1,82 @@
-import random
+from random import randint, choice
+from string import ascii_letters
 import pyperclip
 
-def letters():
-  letterList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z"]
-  randLetter = letterList[random.randint(0, 24)]
+def rnd_letters():
+  # Generate a random letter
+  randLetter = choice(ascii_letters)
+  return randLetter
 
-  if random.randint(1, 2) == 1:
-    randLetter = randLetter.upper()
-    return randLetter
-    
-  else:
-    return randLetter
-
-def numbers():
-  numList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-  randNumber = numList[random.randint(0, 9)]
+def rnd_numbers():
+  randNumber = randint(0, 9)
   return randNumber
 
-def symbols():
-  symList = ["!", "?", "@", "¤", "$", "€", "+", ".", "/", "*", "~", "½", "§", ",", "#", "£", "<", ">", "|", "=", "-", ";", ":", "[", "]", "{", "}", "_", "*"]
-  randSymbol = symList[random.randint(0, 12)]
+def rnd_symbols():
+  # Generate a random symbol
+  symbols = "!@#$%^&*()_+{|}[]<>?/.,;:~`"
+  randSymbol = choice(symbols)
   return randSymbol
 
-def randomizer():
-  password = []
-  for num in range(lenght):
-    if choices == 1:
-      password.append(letters())
+def randomizer(lenght, numbers, symbols):
+  password = ""
+  for _ in range(lenght):
+    if numbers and symbols:
+      randInt = randint(0, 2)
+      if randInt == 0: password += rnd_letters()
+      elif randInt == 1: password += str(rnd_numbers())
+      else: password += rnd_symbols()
 
-    elif choices == 2:
-      randInt = random.randint(1, 2)
-      if randInt == 1:
-        password.append(letters())
-      elif randInt == 2:
-        password.append(str(numbers()))
+    elif numbers:
+      randInt = randint(0, 1)
+      if randInt == 0: password += rnd_letters()
+      else: password += str(rnd_numbers())
 
-    elif choices == 3:
-      randInt = random.randint(1, 2)
-      if randInt == 1:
-        password.append(letters())
-      elif randInt == 2:
-        password.append(symbols())
+    elif symbols:
+      randInt = randint(0, 1)
+      if randInt == 0: password += rnd_letters()
+      else: password += rnd_symbols()
       
-    elif choices == 4:
-      randInt = random.randint(1, 3)
-      if randInt == 1:
-        password.append(letters())
-      elif randInt == 2:
-        password.append(symbols())
-      elif randInt == 3:
-        password.append(str(numbers()))
+    else: password += rnd_letters()
         
   return password
 
 if __name__ == "__main__":
   choices = 1
-  while True:
-      
+  toggle = True
+  while toggle:
     lenght = input("How many characters shall the password have?\n")
     try:
-      lenght = int (lenght)
+      lenght = int(lenght)
       toggle = False
     
-    except:
-      print("Please enter a valid input")
+    except ValueError: print("Please enter a valid input")
 
   while True:
     numChoice = input("Shall the password contain numbers? y/n\n")
-
     if numChoice == 'y':
-      choices += 1
+      numChoice = True
       break
     
     elif numChoice == 'n':
+      numChoice = False
       break
 
-    else:
-      print("Please press a valid key")
+    else: print("Please press a valid key")
 
   while True:
     symChoice = input("Shall the password contain symbols? y/n\n")
     if symChoice == 'y':
-      choices += 2
+      symChoice = True
       break
 
     elif symChoice == 'n':
+      symChoice = False
       break
 
+    else: print("Please press a valid key")
+
   finalPassword = ""
-  for character in randomizer():
+  for character in randomizer(lenght, numChoice, symChoice):
     finalPassword += character
 
   pyperclip.copy(finalPassword)
